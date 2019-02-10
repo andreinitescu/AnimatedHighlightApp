@@ -11,10 +11,10 @@ namespace AnimatedHighlightApp
         public static Size FromPixels(this SKCanvasView skCanvasView, Size rc) =>
             (Size)skCanvasView.FromPixels(new Point(rc.Width, rc.Height));
 
-        public static Point FromPixels(this SKCanvasView sKCanvasView, Point pt)
+        public static Point FromPixels(this SKCanvasView skCanvasView, Point pt)
         {
-            double wf = sKCanvasView.CanvasSize.Width / sKCanvasView.Width;
-            double hf = sKCanvasView.CanvasSize.Height / sKCanvasView.Height;
+            double wf = skCanvasView.CanvasSize.Width / skCanvasView.Width;
+            double hf = skCanvasView.CanvasSize.Height / skCanvasView.Height;
             return new Point(pt.X * wf, pt.Y * hf);
         }
     }

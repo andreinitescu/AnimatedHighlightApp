@@ -68,11 +68,11 @@ namespace AnimatedHighlightApp
 
             if (_currStrokeDash != null)
             {
-                var frameTo = _highlightPath.StrokeDashFrameList.First(sd => sd.Key == _iCurrFocusedView);
+                var frameTo = _highlightPath.StrokeDashFrameList[_iCurrFocusedView];
 
                 var anim = new StrokeDashAnimation(
                     from: _currStrokeDash,
-                    to: new StrokeDash(frameTo.Intervals, frameTo.Phase),
+                    to: new StrokeDash(new float[] { frameTo.IntervalOn, frameTo.IntervalOff }, frameTo.Phase),
                     duration: _highlightSettings.AnimationDuration);
 
                 anim.Start((strokeDash) =>
@@ -95,13 +95,13 @@ namespace AnimatedHighlightApp
             _highlightPath = CreatePathHighlightInfo(_skCanvasView, _formLayout, (float)_highlightSettings.StrokeWidth);
             _skPaint = CreateHighlightSkPaint(_skCanvasView, _highlightPath, _highlightSettings);
 
-            var currFrame = _highlightPath.StrokeDashFrameList.First(sd => sd.Key == _iCurrFocusedView);
-            _currStrokeDash = new StrokeDash(currFrame.Intervals, currFrame.Phase);
+            StrokeDashFrame currFrame = _highlightPath.StrokeDashFrameList[_iCurrFocusedView];
+            _currStrokeDash = new StrokeDash(new float[] { currFrame.IntervalOn, currFrame.IntervalOff }, currFrame.Phase);
             _skCanvasView.InvalidateSurface();
         }
 
         static SKPaint CreateHighlightSkPaint(
-            SKCanvasView sKCanvasView,
+            SKCanvasView skCanvasView,
             HighlightPath highlightPath,
             HighlightSettings highlightSettings)
         {
@@ -109,13 +109,13 @@ namespace AnimatedHighlightApp
             {
                 Style = SKPaintStyle.Stroke,
                 Color = SKColors.Red,
-                StrokeWidth = (float)sKCanvasView.FromPixels(new Point(0, highlightSettings.StrokeWidth)).Y
+                StrokeWidth = (float)skCanvasView.FromPixels(new Point(0, highlightSettings.StrokeWidth)).Y
             };
 
-            float firstInterval = highlightPath.StrokeDashFrameList[0].Intervals[0];
+            float firstIntervalOn = highlightPath.StrokeDashFrameList.First().Value.IntervalOn;
             skPaint.Shader = SKShader.CreateLinearGradient(
-                                start: new SKPoint(firstInterval * 0.30f, 0),
-                                end: new SKPoint(firstInterval, 0),
+                                start: new SKPoint(firstIntervalOn * 0.30f, 0),
+                                end: new SKPoint(firstIntervalOn, 0),
                                 colors: new SKColor[] {
                                             highlightSettings.StrokeStartColor.ToSKColor(),
                                             highlightSettings.StrokeEndColor.ToSKColor()
@@ -126,18 +126,18 @@ namespace AnimatedHighlightApp
             return skPaint;
         }
 
-        static HighlightPath CreatePathHighlightInfo(SKCanvasView sKCanvasView, Layout<View> layout, float strokeWidth)
+        static HighlightPath CreatePathHighlightInfo(SKCanvasView skCanvasView, Layout<View> layout, float strokeWidth)
         {
             var path = new SKPath();
-            var strokeDashFrameList = new List<StrokeDashFrame>();
-            strokeWidth = (float)sKCanvasView.FromPixels(new Point(0, strokeWidth)).Y;
+            var strokeDashFrameList = new Dictionary<int, StrokeDashFrame>();
+            strokeWidth = (float)skCanvasView.FromPixels(new Point(0, strokeWidth)).Y;
 
             IList<View> layoutChildren = layout.Children;
             for (int iLayoutChild = 0; iLayoutChild < layoutChildren.Count; ++iLayoutChild)
             {
                 int iStrokeDashCount = strokeDashFrameList.Count;
                 View view = layoutChildren[iLayoutChild];
-                Rectangle viewBounds = sKCanvasView.FromPixels(view.Bounds);
+                Rectangle viewBounds = skCanvasView.FromPixels(view.Bounds);
 
                 if (!(view is Entry) && !(view is Button))
                 {
@@ -191,17 +191,25 @@ namespace AnimatedHighlightApp
 
                 float solidDashLength = new SKPathMeasure(path).Length - dashOffset;
 
-                strokeDashFrameList.Add(new StrokeDashFrame(
-                    iLayoutChild,
-                    new float[] { solidDashLength, 0 },
-                    -dashOffset));
+                var strokeDashFrame = new StrokeDashFrame(
+                    intervalOn: solidDashLength,
+                    intervalOff: 0,
+                    phase: -dashOffset);
+
+                strokeDashFrameList[iLayoutChild] = strokeDashFrame;
             }
 
             // Compute the 2nd value of interval, which is the length of remaining path
             float pathLength = new SKPathMeasure(path).Length;
             for (int i = 0; i < strokeDashFrameList.Count; ++i)
             {
-                strokeDashFrameList[i].Intervals[1] = pathLength - strokeDashFrameList[i].Intervals[0];
+                KeyValuePair<int, StrokeDashFrame> entry = strokeDashFrameList.ElementAt(i);
+                StrokeDashFrame f = entry.Value;
+
+                strokeDashFrameList[entry.Key] = new StrokeDashFrame(
+                    intervalOn: f.IntervalOn,
+                    intervalOff: pathLength - f.IntervalOn,
+                    phase: f.Phase);
             }
 
             return new HighlightPath(path, strokeDashFrameList);

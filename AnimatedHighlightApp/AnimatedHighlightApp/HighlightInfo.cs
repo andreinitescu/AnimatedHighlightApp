@@ -6,9 +6,9 @@ namespace AnimatedHighlightApp
     class HighlightPath
     {
         public SKPath Path { get; }
-        public IList<StrokeDashFrame> StrokeDashFrameList { get; }
+        public Dictionary<int, StrokeDashFrame> StrokeDashFrameList { get; }
 
-        public HighlightPath(SKPath path, IList<StrokeDashFrame> strokeDashFrameList)
+        public HighlightPath(SKPath path, Dictionary<int, StrokeDashFrame> strokeDashFrameList)
         {
             Path = path;
             StrokeDashFrameList = strokeDashFrameList;

@@ -2,14 +2,14 @@
 {
     class StrokeDashFrame
     {
-        public int Key { get; }
-        public float[] Intervals { get; }
+        public float IntervalOn { get; }
+        public float IntervalOff { get; }
         public float Phase { get; }
 
-        public StrokeDashFrame(int key, float[] intervals, float phase)
+        public StrokeDashFrame(float intervalOn, float intervalOff, float phase)
         {
-            Key = key;
-            Intervals = intervals;
+            IntervalOn = intervalOn;
+            IntervalOff = intervalOff;
             Phase = phase;
         }
     }
