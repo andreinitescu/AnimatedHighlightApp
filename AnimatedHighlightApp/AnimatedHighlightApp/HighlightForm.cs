@@ -29,7 +29,6 @@ namespace AnimatedHighlightApp
             StrokeDash strokeDash = _highlightState.StrokeDash;
             // Comment the next line to see whole path without dash effect
             _skPaint.PathEffect = SKPathEffect.CreateDash(strokeDash.Intervals, strokeDash.Phase);
-
             skCanvas.DrawPath(_highlightState.HighlightPath.Path, _skPaint);
         }
 
