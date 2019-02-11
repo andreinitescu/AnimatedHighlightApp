@@ -7,8 +7,13 @@
 
         public StrokeDash(float[] intervals, float phase)
         {
-            Intervals = new float[] { intervals[0], intervals[1] };
+            Intervals = new float[2] { intervals[0], intervals[1] };
             Phase = phase;
+        }
+
+        public StrokeDash(StrokeDash strokeDash)
+            : this(strokeDash.Intervals, strokeDash.Phase)
+        {
         }
     }
 }
