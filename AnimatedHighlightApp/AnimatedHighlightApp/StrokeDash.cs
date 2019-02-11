@@ -1,4 +1,6 @@
-﻿namespace AnimatedHighlightApp
+﻿using System;
+
+namespace AnimatedHighlightApp
 {
     class StrokeDash
     {
@@ -7,7 +9,8 @@
 
         public StrokeDash(float[] intervals, float phase)
         {
-            Intervals = new float[2] { intervals[0], intervals[1] };
+            Intervals = new float[intervals.Length];
+            Array.Copy(intervals, Intervals, intervals.Length);
             Phase = phase;
         }
 

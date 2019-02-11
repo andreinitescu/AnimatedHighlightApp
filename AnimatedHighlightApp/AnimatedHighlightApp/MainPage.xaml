@@ -23,8 +23,8 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <skiaSharp:SKCanvasView x:Name="_skCanvasView"
-                                            PaintSurface="SkCanvasViewRequiredPainting"
-                                            SizeChanged="SkCanvasViewSizeChanged" />
+                                            PaintSurface="SkCanvasViewPaintSurfaceRequested"
+                                            SizeChanged="SkCanvasViewSizeChanged"/>
                     <StackLayout x:Name="_formLayout"
                                  Padding="60, 25, 60, 20"
                                  Orientation="Vertical"

@@ -23,7 +23,7 @@ namespace AnimatedHighlightApp
         {
             _currStrokeDash = From;
 
-            var anim = new Animation((v) => onValueCallback(_currStrokeDash));
+            var anim = new Animation(_ => onValueCallback(_currStrokeDash));
 
             anim.Add(0, 1, new Animation(
                 callback: v => _currStrokeDash.Phase = (float)v,
