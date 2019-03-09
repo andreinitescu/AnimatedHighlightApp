@@ -1,7 +1,7 @@
 # AnimatedHighlightApp
 A Xamarin.Forms application with form highlight animation using SkiaSharp and Xamarin.Forms built-in animations
 
-![Screenshot](https://github.com/andreinitescu/AnimatedHighlightApp/blob/master/screenshot.png)
+![Screenshot](https://github.com/andreinitescu/AnimatedHighlightApp/blob/master/animation.gif)
 
 My blog post on Telerik's blog:
 
