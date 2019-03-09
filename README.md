@@ -8,3 +8,8 @@ https://www.telerik.com/blogs/xamarinforms-skiasharp-create-awesome-cross-platfo
 
 
 ![Screenshot](https://github.com/andreinitescu/AnimatedHighlightApp/blob/master/animation.gif)
+
+## LICENSE
+
+MIT License
+See LICENSE file.
