@@ -3,4 +3,6 @@ A Xamarin.Forms application with form highlight animation using SkiaSharp and Xa
 
 ![Screenshot](https://github.com/andreinitescu/AnimatedHighlightApp/blob/master/screenshot.png)
 
+Blog post on Telerik's blog:
+
 https://www.telerik.com/blogs/xamarinforms-skiasharp-create-awesome-cross-platform-animations-in-your-mobile-app
